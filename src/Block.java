@@ -32,7 +32,9 @@ public class Block {
 		adjc  = new ArrayList<Integer>();
 
 		prevr  = new LinkedList<Integer>();
+		prevr.add(cx);
 		prevc  = new LinkedList<Integer>();
+		prevc.add(cy);
 
 
 		// ` represents adj blocks
