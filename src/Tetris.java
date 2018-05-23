@@ -28,16 +28,6 @@ public class Tetris extends JFrame{
 				
 				panel.grid[r][c] = 0; // reset to white
 			}
-			
-//			// set center piece to white
-//			panel.grid[x][y] = 0;
-//			for (int i = 0; i < cur.adjr.size(); i++) {
-//				int r = cur.adjr.get(i);
-//				int c = cur.adjc.get(i);
-//
-//				// add all adj squares
-//				panel.grid[x + r][y + c] = 0; // reset to white
-//			}
 		}
 
 		// if it's been a sec, block goes down
@@ -95,8 +85,8 @@ public class Tetris extends JFrame{
 		frame.add(panel); // add panel
 
 		// testing
-		Block l = new Block(3);
-		frame.cur = l;
+		Block b = new Block(7);
+		frame.cur = b;
 
 		panel.setBlock(frame.cur);
 		panel.keyInput.setBlock(frame.cur);

@@ -13,9 +13,6 @@ public class Block {
 	int cx; // center x
 	int cy; // center y
 
-	//	int pcx; // previous center x
-	//	int pcy; // previous center y
-
 	// adj blocks
 	ArrayList<Integer> adjr;
 	ArrayList<Integer> adjc;
@@ -29,8 +26,6 @@ public class Block {
 
 		cx = 0; // center always starts from the top
 		cy = 4; // center always starts at the middle
-		//		pcx = cx;
-		//		pcy = cy;
 
 		// init adj and previous blocks
 		adjr  = new ArrayList<Integer>();
@@ -60,9 +55,8 @@ public class Block {
 		// 2
 		// `
 		// ` * `
-
 		else if (shape == 2) {
-			adjr.add(-1); // -1, -1 -> -1, 1
+			adjr.add(-1);
 			adjc.add(-1);
 			adjr.add(0);
 			adjc.add(-1);
@@ -74,7 +68,7 @@ public class Block {
 		//     `
 		// ` * `
 		else if (shape == 3) {
-			adjr.add(-1); // -1, 1 -> 1, 1
+			adjr.add(-1);
 			adjc.add(1);
 			adjr.add(0);
 			adjc.add(-1);
@@ -91,7 +85,7 @@ public class Block {
 			adjc.add(0);
 			adjr.add(0);
 			adjc.add(1);
-			adjr.add(1); // 1, 1 -> 1, -1
+			adjr.add(1);
 			adjc.add(1);
 		}
 
@@ -142,25 +136,9 @@ public class Block {
 				int r = adjr.remove(0);
 				int c = adjc.remove(0);
 
-				if (r == 0 || c == 0) { // on the x or the y axis
-					adjr.add(c);
-					adjc.add(r);
-
-				} else if (r == -1 && c == -1) {
-					adjr.add(-1);
-					adjc.add(1);
-				} else if (r == -1 && c == 1) {
-					adjr.add(1);
-					adjc.add(1);
-				} else if (r == 1 && c == 1) {
-					adjr.add(1);
-					adjc.add(-1);
-				} else if (r == 1 && c == -1) {
-					adjr.add(-1);
-					adjc.add(-1);
-				}
-
-
+				// rotate every square
+				adjc.add(-r);
+				adjr.add(c);
 			}
 		}
 	}
