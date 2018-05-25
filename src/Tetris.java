@@ -18,77 +18,17 @@ public class Tetris extends JFrame{
 		panel = new Panel();
 	}
 
-	// makes the block stay within grid
-	public void withinGrid() {
-		boolean in = false;
-
-		while (!in) { // keep testing until it stays within bounds	
-			in = true;
-
-			int x = cur.cx;
-			int y = cur.cy;
-
-			if (x > 19) {
-				in = false;
-				cur.cx--;
-				continue;
-			} else if (y < 0) {
-				in = false;
-				cur.cy++;
-				continue;
-			} else if (y > 9) {
-				in = false;
-				cur.cy--;
-				continue;
-			}
-
-			for (int i = 0; i < cur.adjr.size(); i++) {
-				int r = cur.adjr.get(i);
-				int c = cur.adjc.get(i);
-
-				if (x + r > 19) {
-					in = false;
-					cur.cx--;
-					break;
-				} else if (y + c < 0) {
-					in = false;
-					cur.cy++;
-					break;
-				} else if (y + c > 9) {
-					in = false;
-					cur.cy--;
-					break;
-				}
-			}
-		}
-	}
-
 	public void toGrid() {
-		// ERASE PREVIOUS
-		int pr = cur.prevr.pop();
-		int pc = cur.prevc.pop();
-		panel.grid[pr][pc] = 0; // reset to white
-
-		if (cur.cx != 0) { // if the block is not at the top
-			while (cur.prevr.size() > 0) {
-				int r = cur.prevr.pop();
-				int c = cur.prevc.pop();
-
-				panel.grid[r][c] = 0; // reset to white
-			}
-		}
-
+		cur.erasePrevious();
+		
 		// if it's been a sec, block goes down
 		if (lastMoved >= 700) {
 			lastMoved = 0; // reset last
 			cur.cx++;
 		}
 
-		withinGrid();
-		//		if (!withinGrid()) {
-		//			cur.cx = pr;
-		//			cur.cy = pc;
-		//		}
+		// makes sure the block stays within the grid
+		boolean reachedBottom = cur.withinBounds();
 
 		int x = cur.cx;
 		int y = cur.cy;
@@ -110,6 +50,18 @@ public class Tetris extends JFrame{
 			cur.prevc.add(y + c);
 		}
 
+		if (reachedBottom) {
+			newBlock();
+			cur.cx++;
+		}
+	}
+	
+	public void newBlock() {
+		// create new block
+		cur = new Block((int)(Math.random() * 7 + 1));
+		panel.setBlock(cur);
+		panel.keyInput.setBlock(cur);
+		cur.setPanel(panel);
 	}
 
 	// game loop
@@ -140,14 +92,11 @@ public class Tetris extends JFrame{
 		frame.setSize(500, 823); // extra 100 px width for "NEXT"
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.add(frame.panel);
+		frame.panel.keyInput.setPanel(frame.panel);
 
 		// testing
-		Block b = new Block(1);
-		frame.cur = b;
+		frame.newBlock();
 
-		frame.panel.setBlock(frame.cur);
-		frame.panel.keyInput.setBlock(frame.cur);
-		frame.panel.keyInput.setPanel(frame.panel);
 
 		// game loop
 		frame.loop();

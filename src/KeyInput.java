@@ -18,14 +18,36 @@ public class KeyInput implements KeyListener{
 	public void keyTyped(KeyEvent e) {
 		char key = e.getKeyChar();
 
-		if (key == 'w') {
-			cur.rotate();
-		} else if (key == 'a') {
-			cur.cy--;
-		} else if (key == 's') {
-			cur.cx++;
-		} else if (key == 'd') {
-			cur.cy++;
+		if (!cur.fixed) {
+			if (key == 'w') {
+				cur.rotate();
+			} else if (key == 'a') {
+				cur.cy--;
+				cur.erasePrevious();
+				boolean reachedLeft = cur.checkLeft();
+				
+				if (reachedLeft) {
+					System.out.println("reachedLeft");
+					cur.cy++;
+				}
+			} else if (key == 's') {
+				cur.cx++;
+			} else if (key == 'd') {
+				cur.cy++;
+				cur.erasePrevious();
+				boolean reachedRight = cur.checkRight();
+				
+				if (reachedRight) {
+					System.out.println("reachedRight");
+					cur.cy--;
+				}
+			} else if (key == ' ') {
+				cur.erasePrevious();
+				while (!cur.withinBounds()) {
+					cur.cx++;
+				}
+				cur.fixed = true;
+			}
 		}
 	}
 

@@ -3,15 +3,15 @@
 // Block.java
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.LinkedList;
 
 public class Block {
 
-	int[][] filled;
+	Panel panel;
 	int shape;
 	int cx; // center x
 	int cy; // center y
+	boolean fixed; // when hit the bottom, the block cannot move
 
 	// adj blocks
 	ArrayList<Integer> adjr;
@@ -23,6 +23,7 @@ public class Block {
 
 	public Block(int s) {
 		shape = s;
+		fixed = false;
 
 		cx = 0; // center always starts from the top
 		cy = 4; // center always starts at the middle
@@ -127,7 +128,131 @@ public class Block {
 			adjr.add(0);
 			adjc.add(1);
 		}
+	}
 
+	public void setPanel(Panel p) {
+		panel = p;
+	}
+
+	// erase previous
+	public void erasePrevious() {
+		if (prevr.size() > 0) {
+			int pr = prevr.pop();
+			int pc = prevc.pop();
+			panel.grid[pr][pc] = 0; // reset to white
+
+			if (cx != 0) { // if the block is not at the top
+				while (prevr.size() > 0) {
+					int r = prevr.pop();
+					int c = prevc.pop();
+
+					panel.grid[r][c] = 0; // reset to white
+				}
+			}
+		}
+	}
+	
+	public boolean checkLeft() {
+		// boolean reachedRight = false;
+		
+		int x = cx;
+		int y = cy;
+		
+		if (y < 0) {
+			System.out.println("left out of bounds");
+			return true;
+		}
+
+		for (int i = 0; i < adjr.size(); i++) {
+			int r = adjr.get(i);
+			int c = adjc.get(i);
+
+			if (y + c < 0 || panel.grid[x + r][y + c] != 0) {
+				System.out.println("left adj has block at " + (x + r) + " " + (y + c));
+				return true;
+			}
+		}
+		
+		return false;
+	}
+	
+	public boolean checkRight() {
+		// boolean reachedRight = false;
+		
+		int x = cx;
+		int y = cy;
+		
+		if (y > 9) {
+			System.out.println("right out of bounds");
+			return true;
+		}
+
+		for (int i = 0; i < adjr.size(); i++) {
+			int r = adjr.get(i);
+			int c = adjc.get(i);
+
+			if (y + c > 9 || panel.grid[x + r][y + c] != 0) {
+				System.out.println("right adj has block at " + (x + r) + " " + (y + c));
+				return true;
+			}
+		}
+		
+		return false;
+	}
+
+	// makes the block stay within grid
+	public boolean withinBounds() {
+		boolean in = false;
+		boolean reachedBottom = false;
+
+		while (!in) { // keep testing until it stays within bounds	
+			in = true;
+
+			int x = cx;
+			int y = cy;
+			
+			if (y < 0) {
+				in = false;
+				cy++;
+				continue;
+			} else if (y > 9) {
+				in = false;
+				cy--;
+				continue;
+			} else if (x > 19 || panel.grid[x][y] != 0) {
+				reachedBottom = true;
+				in = false;
+				cx--;
+				continue;
+			}
+
+			for (int i = 0; i < adjr.size(); i++) {
+				int r = adjr.get(i);
+				int c = adjc.get(i);
+
+				if (y + c < 0) {
+					in = false;
+					cy++;
+					break;
+				} else if (y + c > 9) {
+					in = false;
+					cy--;
+					break;
+				} else if (x + r > 19 || panel.grid[x + r][y + c] != 0) {
+					reachedBottom = true;
+					in = false;
+					cx--;
+					break;
+				}
+			}
+		}
+
+		if (reachedBottom) {
+			System.out.println("reached bottom");
+			// fixed = true;
+		}
+		
+		return reachedBottom;
 	}
 
 	public void rotate() {
@@ -144,46 +269,5 @@ public class Block {
 			}
 		}
 	}
-
-	public void testRotate() {
-		int[][] alt = new int[filled[0].length][filled.length];
-
-		if (shape % 2 == 1) { // if shape is 1, 3, or 5, turn clockwise
-			for (int i = 0; i < filled[0].length; i++) {
-				for (int j = filled.length - 1; j >= 0; j--) {
-					alt[i][j] = filled[j][i];
-				}
-			}
-
-		} else { // turn back to 1, 3, or 5
-			for (int i = 0; i < filled[0].length; i++) {
-				for (int j = filled.length - 1; j >= 0; j--) {
-					alt[i][j] = filled[j][i];
-				}
-			}
-		}
-
-		for (int i = 0; i < filled.length; i++) {
-			System.out.println(Arrays.toString(filled[i]));
-		}
-		System.out.println();
-		for (int i = 0; i < alt.length; i++) {
-			System.out.println(Arrays.toString(alt[i]));
-		}
-
-		// reset
-		for (int i = 0; i < filled.length; i++) {
-			Arrays.fill(filled[i], 0);
-		}
-
-		// set filled to alt
-		for (int i = 0; i < filled.length; i++) {
-			for (int j = 0; j < filled[0].length; j++) {
-				filled[i][j] = alt[j][i];
-			}
-		}
-
-
-	} //
 
 }
