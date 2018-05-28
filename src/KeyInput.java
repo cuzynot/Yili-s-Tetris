@@ -3,15 +3,21 @@ import java.awt.event.KeyListener;
 
 public class KeyInput implements KeyListener{
 
+	Tetris frame; // instance of frame
 	Panel panel; // instance of panel
 	Block cur; // instance of current block
 
-	public void setBlock(Block c) {
-		cur = c;
+	// SET INSTANCES
+	public void setFrame(Tetris t) {
+		frame = t;
 	}
-
+	
 	public void setPanel(Panel p) {
 		panel = p;
+	}
+	
+	public void setBlock(Block c) {
+		cur = c;
 	}
 
 	// key inputs
@@ -21,6 +27,7 @@ public class KeyInput implements KeyListener{
 		if (!cur.fixed) {
 			if (key == 'w') {
 				cur.rotate();
+				
 			} else if (key == 'a') {
 				cur.cy--;
 				cur.erasePrevious();
@@ -30,8 +37,11 @@ public class KeyInput implements KeyListener{
 					System.out.println("reachedLeft");
 					cur.cy++;
 				}
+				
 			} else if (key == 's') {
 				cur.cx++;
+				frame.lastMoved = 0; // reset last moved
+				
 			} else if (key == 'd') {
 				cur.cy++;
 				cur.erasePrevious();
@@ -41,12 +51,15 @@ public class KeyInput implements KeyListener{
 					System.out.println("reachedRight");
 					cur.cy--;
 				}
+				
 			} else if (key == ' ') {
 				cur.erasePrevious();
 				while (!cur.withinBounds()) {
 					cur.cx++;
 				}
 				cur.fixed = true;
+				
+				frame.lastMoved = 700;
 			}
 		}
 	}
@@ -54,9 +67,5 @@ public class KeyInput implements KeyListener{
 	public void keyPressed(KeyEvent e) {}
 
 	public void keyReleased(KeyEvent e) {}
-
-
-
-
 
 }

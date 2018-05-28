@@ -32,7 +32,7 @@ public class Panel extends JPanel{
 		getColor.put(3, Color.BLUE);
 		getColor.put(4, Color.GREEN);
 		getColor.put(5, Color.RED);
-		getColor.put(6, Color.PINK);
+		getColor.put(6, Color.MAGENTA);
 		getColor.put(7, Color.YELLOW);
 		
 		// init grid
@@ -50,7 +50,7 @@ public class Panel extends JPanel{
 		g.fillRect(0, 0, 500, 823);
 
 		// draw grid
-		g.setColor(Color.BLACK);
+		g.setColor(Color.GRAY);
 		for (int i = 0; i < 20; i++) {
 			for (int j = 0; j < 10; j++) {
 				g.drawRect(j * 40, i * 40, 40, 40);

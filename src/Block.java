@@ -153,8 +153,6 @@ public class Block {
 	}
 	
 	public boolean checkLeft() {
-		// boolean reachedRight = false;
-		
 		int x = cx;
 		int y = cy;
 		
@@ -177,8 +175,6 @@ public class Block {
 	}
 	
 	public boolean checkRight() {
-		// boolean reachedRight = false;
-		
 		int x = cx;
 		int y = cy;
 		
