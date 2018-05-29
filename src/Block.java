@@ -25,16 +25,16 @@ public class Block {
 		shape = s;
 		fixed = false;
 
-		cx = 0; // center always starts from the top
+		cx = 2; // center always starts from the top
 		cy = 4; // center always starts at the middle
 
 		// init adj and previous blocks
-		adjr  = new ArrayList<Integer>();
-		adjc  = new ArrayList<Integer>();
+		adjr = new ArrayList<Integer>();
+		adjc = new ArrayList<Integer>();
 
-		prevr  = new LinkedList<Integer>();
+		prevr = new LinkedList<Integer>();
 		prevr.add(cx);
-		prevc  = new LinkedList<Integer>();
+		prevc = new LinkedList<Integer>();
 		prevc.add(cy);
 
 
@@ -42,17 +42,14 @@ public class Block {
 		// * represents center block
 
 		// 1
-		// `
-		// *
-		// `
-		// `
+		// ` * ` `
 		if (shape == 1) {
-			adjr.add(-1);
-			adjc.add(0);
-			adjr.add(1);
-			adjc.add(0);
-			adjr.add(2);
-			adjc.add(0);
+			adjr.add(0);
+			adjc.add(-1);
+			adjr.add(0);
+			adjc.add(1);
+			adjr.add(0);
+			adjc.add(2);
 		}
 
 		// 2
@@ -80,29 +77,27 @@ public class Block {
 		}
 
 		// 4
-		// `
-		// * `
-		//   `
+		//   * `
+		// ` `
 		else if (shape == 4) {
-			adjr.add(-1);
-			adjc.add(0);
 			adjr.add(0);
 			adjc.add(1);
 			adjr.add(1);
-			adjc.add(1);
+			adjc.add(-1);
+			adjr.add(1);
+			adjc.add(0);
 		}
 
 		// 5
-		//   `
-		// * `
-		// `
+		// ` *
+		//   ` `
 		else if (shape == 5) {
-			adjr.add(-1);
-			adjc.add(1);
 			adjr.add(0);
-			adjc.add(1);
+			adjc.add(-1);
 			adjr.add(1);
 			adjc.add(0);
+			adjr.add(1);
+			adjc.add(1);
 		}
 
 		// 6
@@ -215,7 +210,7 @@ public class Block {
 				in = false;
 				cy--;
 				continue;
-			} else if (x > 19 || panel.grid[x][y] != 0) {
+			} else if (x > 21 || panel.grid[x][y] != 0) {
 				reachedBottom = true;
 				in = false;
 				cx--;
@@ -234,7 +229,7 @@ public class Block {
 					in = false;
 					cy--;
 					break;
-				} else if (x + r > 19 || panel.grid[x + r][y + c] != 0) {
+				} else if (x + r > 21 || panel.grid[x + r][y + c] != 0) {
 					reachedBottom = true;
 					in = false;
 					cx--;

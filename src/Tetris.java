@@ -12,8 +12,9 @@ public class Tetris extends JFrame{
 
 	Panel panel; // panel obj
 	Block cur; // current block
-	Block next; // upcoming block
-	int lastMoved = 700; // last time block auto moved
+	int next; // upcoming block
+	int hold; // held block
+	int lastMoved = 800; // last time block auto moved
 
 	// constructor
 	public Tetris() {
@@ -24,7 +25,7 @@ public class Tetris extends JFrame{
 		cur.erasePrevious();
 		
 		// if it's been a sec, block goes down
-		if (lastMoved >= 700) {
+		if (lastMoved >= 800) {
 			lastMoved = 0; // reset last
 			cur.cx++;
 		}
@@ -58,14 +59,29 @@ public class Tetris extends JFrame{
 			
 			// check for cleared lines
 			clear();
+			
+			if (gameover()) {
+				System.out.println("GAME OVER");
+				System.exit(0);
+			}
 		}
+	}
+	
+	public boolean gameover() {
+		for (int i = 0; i < 10; i++) {
+			if (panel.grid[2][i] != 0) {
+				return true;
+			}
+		}
+		
+		return false;
 	}
 	
 	public void clear() {
 		LinkedList<Integer> uncleared = new LinkedList<Integer>();
 		
 		int firstCleared = -1;
-		for (int i = 19; i >= 0; i--) {
+		for (int i = 21; i >= 2; i--) {
 			boolean empty = true;
 			boolean full = true;
 			
@@ -106,10 +122,12 @@ public class Tetris extends JFrame{
 	
 	public void newBlock() {
 		// create new block
-		cur = new Block((int)(Math.random() * 7 + 1));
+		cur = new Block(next);
 		panel.setBlock(cur);
 		panel.keyInput.setBlock(cur);
 		cur.setPanel(panel);
+		
+		next = (int)(Math.random() * 7 + 1);
 	}
 
 	// GAME LOOP
@@ -140,12 +158,19 @@ public class Tetris extends JFrame{
 		frame.setSize(500, 823); // extra 100 px width for "NEXT"
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.add(frame.panel);
+		
+		// set up instances in panel and keyInput
+		frame.panel.setFrame(frame);
 		frame.panel.keyInput.setPanel(frame.panel);
 		frame.panel.keyInput.setFrame(frame);
 
-		// testing
+		frame.next = (int)(Math.random() * 7 + 1); // first block
 		frame.newBlock();
+		frame.next = (int)(Math.random() * 7 + 1); // next block
 
+		// draws lines for the grid
+		frame.panel.drawGrid(frame.panel.getGraphics());
+		
 		// game loop
 		frame.loop();
 	}
