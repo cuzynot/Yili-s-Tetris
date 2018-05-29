@@ -31,17 +31,17 @@ public class Panel extends JPanel{
 	public Panel() {
 		try {
 			// read text images
-			next = ImageIO.read(new File("next.png"));
+			next = ImageIO.read(new File("Images/next.png"));
 			
 			
 			// read block images
-			bimgs[0] = ImageIO.read(new File("b0.png"));
-			bimgs[1] = ImageIO.read(new File("b1.png"));
-			bimgs[2] = ImageIO.read(new File("b2.png"));
-			bimgs[3] = ImageIO.read(new File("b3.png"));
-			bimgs[4] = ImageIO.read(new File("b4.png"));
-			bimgs[5] = ImageIO.read(new File("b5.png"));
-			bimgs[6] = ImageIO.read(new File("b6.png"));
+			bimgs[0] = ImageIO.read(new File("Images/b0.png"));
+			bimgs[1] = ImageIO.read(new File("Images/b1.png"));
+			bimgs[2] = ImageIO.read(new File("Images/b2.png"));
+			bimgs[3] = ImageIO.read(new File("Images/b3.png"));
+			bimgs[4] = ImageIO.read(new File("Images/b4.png"));
+			bimgs[5] = ImageIO.read(new File("Images/b5.png"));
+			bimgs[6] = ImageIO.read(new File("Images/b6.png"));
 			
 		} catch (IOException e) {
 			e.printStackTrace();
