@@ -12,6 +12,7 @@ public class Block {
 	int cx; // center x
 	int cy; // center y
 	boolean fixed; // when hit the bottom, the block cannot move
+	boolean switched; // when the block has already been switched with the held block
 
 	// adj blocks
 	ArrayList<Integer> adjr;
@@ -22,10 +23,16 @@ public class Block {
 	LinkedList<Integer> prevc;
 
 	public Block(int s) {
+		switched = false;
 		shape = s;
 		fixed = false;
 
-		cx = 2; // center always starts from the top
+		if (shape == 1 || shape == 4 || shape == 5) {
+			cx = 1; // centers for 1 4 and 5 are higher up
+		} else {
+			cx = 2; // centers for 2 3 6 and 7 are one square below
+		}
+		
 		cy = 4; // center always starts at the middle
 
 		// init adj and previous blocks
@@ -146,11 +153,11 @@ public class Block {
 			}
 		}
 	}
-	
+
 	public boolean checkLeft() {
 		int x = cx;
 		int y = cy;
-		
+
 		if (y < 0) {
 			System.out.println("left out of bounds");
 			return true;
@@ -165,14 +172,14 @@ public class Block {
 				return true;
 			}
 		}
-		
+
 		return false;
 	}
-	
+
 	public boolean checkRight() {
 		int x = cx;
 		int y = cy;
-		
+
 		if (y > 9) {
 			System.out.println("right out of bounds");
 			return true;
@@ -187,7 +194,7 @@ public class Block {
 				return true;
 			}
 		}
-		
+
 		return false;
 	}
 
@@ -201,7 +208,7 @@ public class Block {
 
 			int x = cx;
 			int y = cy;
-			
+
 			if (y < 0) {
 				in = false;
 				cy++;
@@ -238,11 +245,6 @@ public class Block {
 			}
 		}
 
-		if (reachedBottom) {
-			System.out.println("reached bottom");
-			// fixed = true;
-		}
-		
 		return reachedBottom;
 	}
 

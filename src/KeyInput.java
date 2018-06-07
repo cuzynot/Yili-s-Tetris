@@ -31,9 +31,11 @@ public class KeyInput implements KeyListener{
 		int k = e.getKeyCode();
 
 		if (!cur.fixed) {
+			// rotate
 			if (k == KeyEvent.VK_UP) {
 				cur.rotate();
 
+				// left
 			} else if (k == KeyEvent.VK_LEFT) {
 				cur.cy--;
 				cur.erasePrevious();
@@ -44,10 +46,12 @@ public class KeyInput implements KeyListener{
 					cur.cy++;
 				}
 
+				// down
 			} else if (k == KeyEvent.VK_DOWN) {
 				cur.cx++;
 				frame.lastMoved = 0; // reset last moved
 
+				// right
 			} else if (k == KeyEvent.VK_RIGHT) {
 				cur.cy++;
 				cur.erasePrevious();
@@ -58,14 +62,32 @@ public class KeyInput implements KeyListener{
 					cur.cy--;
 				}
 
+				// hard drop
 			} else if (k == KeyEvent.VK_SPACE) {
 				cur.erasePrevious();
 				while (!cur.withinBounds()) {
 					cur.cx++;
 				}
+				
 				cur.fixed = true;
-
 				frame.lastMoved = 700;
+				
+				// hold
+			} else if (k == KeyEvent.VK_C || k == KeyEvent.VK_TAB) {
+				cur.erasePrevious();
+				int held = frame.hold;
+				
+				if (held == 0) {
+					frame.hold = cur.shape; // hold block
+					frame.newBlock();
+					frame.lastMoved = 700;
+					
+				} else if (!cur.switched) {
+					frame.hold = cur.shape; // hold block
+					frame.newBlock(held);
+					cur.switched = true;
+					frame.lastMoved = 700;
+				}
 			}
 		}
 	}
