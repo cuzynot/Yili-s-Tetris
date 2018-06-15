@@ -25,6 +25,65 @@ public class Tetris extends JFrame{
 	// constructor
 	public Tetris() {
 		panel = new Panel();
+		opp = new Opponent();
+
+		Menu menu = new Menu(this);
+		//		server = new Server(false, this);
+		//		server = menu.server; // get instance of server from menu
+
+		// constant check of the opponent
+		input = new Thread(new Runnable(){
+			public void run(){
+				while (server.sc.hasNextLine() && !game_over){
+
+					// receive info of next, hold and opponent's 2d array
+					opp.next = server.sc.nextInt();
+					opp.hold = server.sc.nextInt();
+
+					for (int i = 0; i < 22; i++) {
+						for (int j = 0; j < 10; j++) {
+							opp.grid[i][j] = server.sc.nextInt();
+						}
+					}
+				}
+			}
+		});
+
+		synchronized(input) {
+			try {
+				input.wait();
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
+		}
+
+		input.start();
+
+
+		// after server is connected, draw panel
+
+
+
+		// init frame 
+		setTitle("Tetris");
+		setVisible(true); // set visible
+		setSize(1000, 823); // extra 100 px width for "NEXT"
+		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		add(panel);
+
+		// set up instances in panel and keyInput
+		panel.setFrame(this);
+		panel.keyInput.setPanel(panel);
+		panel.keyInput.setFrame(this);
+
+		// setup next block
+		next = (int)(Math.random() * 7 + 1); // first block
+		newBlock();
+		next = (int)(Math.random() * 7 + 1); // next block
+
+
+		// game loop
+		loop();
 	}
 
 	public void toGrid() {
@@ -158,7 +217,7 @@ public class Tetris extends JFrame{
 	void sendInfo() {
 		server.ps.println(next);
 		server.ps.println(hold);
-		
+
 		for (int i = 0; i < 22; i++) {
 			for (int j = 0; j < 10; j++) {
 				server.ps.println(panel.grid[i][j]);
@@ -190,66 +249,64 @@ public class Tetris extends JFrame{
 
 
 	// MAIN METHOD //
-	public static void main (String[] args) {
-		Tetris frame = new Tetris();
-
-		frame.opp = new Opponent();
-		
-		// init frame 
-		frame.setTitle("Tetris");
-		frame.setVisible(true); // set visible
-		frame.setSize(1000, 823); // extra 100 px width for "NEXT"
-		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		frame.add(frame.panel);
-
-		// set up instances in panel and keyInput
-		frame.panel.setFrame(frame);
-		frame.panel.keyInput.setPanel(frame.panel);
-		frame.panel.keyInput.setFrame(frame);
-
-		// setup next block
-		frame.next = (int)(Math.random() * 7 + 1); // first block
-		frame.newBlock();
-		frame.next = (int)(Math.random() * 7 + 1); // next block
-
-		
-
-		frame.server = new Server(true, frame);
-
-		// constant check of the opponent
-		frame.input = new Thread(new Runnable(){
-			public void run(){
-				while (frame.server.sc.hasNextLine() && !frame.game_over){
-
-					// receive info of next, hold and opponent's 2d array
-					frame.opp.next = frame.server.sc.nextInt();
-					frame.opp.next = frame.server.sc.nextInt();
-					
-					for (int i = 0; i < 22; i++) {
-						for (int j = 0; j < 10; j++) {
-							frame.opp.grid[i][j] = frame.server.sc.nextInt();
-						}
-					}
-				}
-			}
-		});
-
-		synchronized(frame.input) {
-			try {
-				frame.input.wait();
-			} catch (InterruptedException e) {
-				e.printStackTrace();
-			}
-		}
-
-		frame.input.start();
-		
-		
-		// after server is connected, draw panel
-		
-		
-
-		// game loop
-		frame.loop();
-	}
+	//	public static void main (String[] args) {
+	//		new Tetris();
+	//	
+	//		Menu menu = new Menu(frame);
+	//		// frame.server = new Server(false, frame);
+	//
+	//		// constant check of the opponent
+	//		frame.input = new Thread(new Runnable(){
+	//			public void run(){
+	//				while (frame.server.sc.hasNextLine() && !frame.game_over){
+	//
+	//					// receive info of next, hold and opponent's 2d array
+	//					frame.opp.next = frame.server.sc.nextInt();
+	//					frame.opp.hold = frame.server.sc.nextInt();
+	//
+	//					for (int i = 0; i < 22; i++) {
+	//						for (int j = 0; j < 10; j++) {
+	//							frame.opp.grid[i][j] = frame.server.sc.nextInt();
+	//						}
+	//					}
+	//				}
+	//			}
+	//		});
+	//
+	//		synchronized(frame.input) {
+	//			try {
+	//				frame.input.wait();
+	//			} catch (InterruptedException e) {
+	//				e.printStackTrace();
+	//			}
+	//		}
+	//
+	//		frame.input.start();
+	//
+	//
+	//		// after server is connected, draw panel
+	//
+	//		
+	//
+	//		// init frame 
+	//		frame.setTitle("Tetris");
+	//		frame.setVisible(true); // set visible
+	//		frame.setSize(1000, 823); // extra 100 px width for "NEXT"
+	//		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+	//		frame.add(frame.panel);
+	//
+	//		// set up instances in panel and keyInput
+	//		frame.panel.setFrame(frame);
+	//		frame.panel.keyInput.setPanel(frame.panel);
+	//		frame.panel.keyInput.setFrame(frame);
+	//
+	//		// setup next block
+	//		frame.next = (int)(Math.random() * 7 + 1); // first block
+	//		frame.newBlock();
+	//		frame.next = (int)(Math.random() * 7 + 1); // next block
+	//
+	//
+	//		// game loop
+	//		frame.loop();
+	//	}
 }

@@ -116,8 +116,8 @@ public class Panel extends JPanel{
 		
 		// OPPONENT
 		// next
-		g.drawImage(next, 420, 30, 50, 50, null);
-		g.drawImage(bimgs[frame.opp.next - 1], 415, 100, 70, 50, null);
+		g.drawImage(next, 420 + 500, 30, 50, 50, null);
+		g.drawImage(bimgs[frame.opp.next - 1], 415 + 500, 100, 70, 50, null);
 
 		// hold
 		g.drawImage(hold, 420 + 500, 630, 50, 50, null);
