@@ -27,7 +27,7 @@ public class Tetris extends JFrame{
 		panel = new Panel();
 		opp = new Opponent();
 
-		Menu menu = new Menu(this);
+		new Menu(this);
 		//		server = new Server(false, this);
 		//		server = menu.server; // get instance of server from menu
 
@@ -245,68 +245,4 @@ public class Tetris extends JFrame{
 			panel.repaint();
 		}
 	}
-
-
-
-	// MAIN METHOD //
-	//	public static void main (String[] args) {
-	//		new Tetris();
-	//	
-	//		Menu menu = new Menu(frame);
-	//		// frame.server = new Server(false, frame);
-	//
-	//		// constant check of the opponent
-	//		frame.input = new Thread(new Runnable(){
-	//			public void run(){
-	//				while (frame.server.sc.hasNextLine() && !frame.game_over){
-	//
-	//					// receive info of next, hold and opponent's 2d array
-	//					frame.opp.next = frame.server.sc.nextInt();
-	//					frame.opp.hold = frame.server.sc.nextInt();
-	//
-	//					for (int i = 0; i < 22; i++) {
-	//						for (int j = 0; j < 10; j++) {
-	//							frame.opp.grid[i][j] = frame.server.sc.nextInt();
-	//						}
-	//					}
-	//				}
-	//			}
-	//		});
-	//
-	//		synchronized(frame.input) {
-	//			try {
-	//				frame.input.wait();
-	//			} catch (InterruptedException e) {
-	//				e.printStackTrace();
-	//			}
-	//		}
-	//
-	//		frame.input.start();
-	//
-	//
-	//		// after server is connected, draw panel
-	//
-	//		
-	//
-	//		// init frame 
-	//		frame.setTitle("Tetris");
-	//		frame.setVisible(true); // set visible
-	//		frame.setSize(1000, 823); // extra 100 px width for "NEXT"
-	//		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-	//		frame.add(frame.panel);
-	//
-	//		// set up instances in panel and keyInput
-	//		frame.panel.setFrame(frame);
-	//		frame.panel.keyInput.setPanel(frame.panel);
-	//		frame.panel.keyInput.setFrame(frame);
-	//
-	//		// setup next block
-	//		frame.next = (int)(Math.random() * 7 + 1); // first block
-	//		frame.newBlock();
-	//		frame.next = (int)(Math.random() * 7 + 1); // next block
-	//
-	//
-	//		// game loop
-	//		frame.loop();
-	//	}
 }
